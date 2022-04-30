@@ -3,8 +3,11 @@ const profileDataArgs=process.argv.slice(2, process.argv.length);
 console.log(profileDataArgs);
 console.log(process.argv.length);
 
-const sum =5+3;
 
-sum +=1;
+const printProfileData=profileDataArr=>{
+    for (let i =0; i<profileDataArr.length;i++){
+        console.log(profileDataArr[i]);
+    }
+};
 
-console.log(sum)
+printProfileData(profileDataArgs);
