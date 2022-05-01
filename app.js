@@ -1,14 +1,8 @@
 const inquirer = require('inquirer');
-// const fs = require('fs');
-// const generatePage=require('./src/page-template');
+const fs = require('fs');
+const generatePage=require('./src/page-template');
 
-// const pageHTML=generatePage(name, github);
 
-// fs.writeFile('./index.html',pageHTML,err=>{
-//     if(err) throw err;
-
-//     console.log("Protfolio complete! Check out index.html to see the output!");
-// });
 const promptUser=()=>{
     return inquirer.prompt([
         {
@@ -28,8 +22,8 @@ const promptUser=()=>{
             type:'input',
             name:'github',
             message:'Enter your Github Username? (Required)',
-            validate:nameInput=>{
-                if(nameInput){
+            validate:githubInput=>{
+                if(githubInput){
                     return true;
                 }else{
                     console.log('please enter your Github Username!');
@@ -58,10 +52,7 @@ const promptUser=()=>{
     ]);  
 };
 
-const promptProject =portfolioData =>{
-
-    // If there's no 'projects' array property, create one
-    
+const promptProject =portfolioData =>{    
 
     console.log(`
     ==========================
@@ -69,6 +60,7 @@ const promptProject =portfolioData =>{
     ==========================
     `);
 
+    // If there's no 'projects' array property, create one
     if (!portfolioData.projects) {
         portfolioData.projects = [];
     }
@@ -91,8 +83,8 @@ const promptProject =portfolioData =>{
             type:'input',
             name:'description',
             message:"Provide a description of the project (Required)",
-            validate:nameInput=>{
-                if(nameInput){
+            validate:descriptionInput=>{
+                if(descriptionInput){
                     return true;
                 }else{
                     console.log('please enter the description of the project!');
@@ -103,7 +95,7 @@ const promptProject =portfolioData =>{
         },
         {
             type:'checkbox',
-            name:'language',
+            name:'languages',
             message:"What did you build this project with? (Check all that apply)",
             choices:["Javascript","HTML", "CSS", "ES6","jQuery","Bootstrap","Node"]
 
@@ -151,5 +143,11 @@ const promptProject =portfolioData =>{
 promptUser()
 .then(promptProject)
 .then(portfolioData=>{
-    console.log(portfolioData);
+    const pageHTML=generatePage(portfolioData);
+
+    fs.writeFile('./index.html',pageHTML,err=>{
+        if(err) throw new Error(err);
+
+        console.log("Page created! Check out index.html in this directory to see it!");
+    });
 });
